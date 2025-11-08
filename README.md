@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Textbook Summarizer & Question Predictor (Demo)
 
@@ -34,3 +35,7 @@ A simple demo web app (Flask) that summarizes pasted textbook text and attempts 
 
 ## License
 MIT
+=======
+# textbook-summarizer
+textbook summarizer and question predictor 
+>>>>>>> 4e5f1f5fb2202c920b4a7feb490e56c0be4190dd
