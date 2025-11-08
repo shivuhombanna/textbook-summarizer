@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Summary & Questions</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6c63ff, #4a90e2);
+
+    }
+
+    .hero {
+      text-align: center;
+      padding: 50px 20px;
+      color: white;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    .hero img {
+      width: 300px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      width: 60%;
+      background: #ffffff;
+      margin: -20px auto 50px auto;
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      animation: fadeIn 1.4s ease-in-out;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 15px;
+      font-size: 15px;
+      border-radius: 12px;
+      border: 1px solid #aaa;
+      resize: vertical;
+      transition: 0.3s;
+    }
+
+    textarea:focus {
+      border-color: #6c63ff;
+      box-shadow: 0 0 10px rgba(108,99,255,0.4);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 15px;
+      border: none;
+      font-size: 18px;
+      background: #6c63ff;
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    button:hover {
+      background: #564ff0;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      background: #ffcccc;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .upload-box {
+      height: 300px;
+      width: 100%;
+      max-width: 4000px;
+      border-radius: 10px;
+      box-shadow: 4px 4px 30px rgba(0, 0, 0, .2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      gap: 5px;
+      background-color: rgba(0, 110, 255, 0.041);
+      margin: 20px auto;
+      transition: 0.3s;
+    }
+
+    .upload-box.dragover {
+      background-color: rgba(65, 105, 225, 0.1);
+      border: 2px dashed #564ff0;
+      transform: scale(1.02);
+    }
+
+    .upload-box .header {
+      flex: 1;
+      width: 100%;
+      border: 2px dashed royalblue;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .upload-box .header:hover {
+      background-color: rgba(37, 82, 216, 0.438);
+    }
+
+    .upload-box .header svg {
+      height: 100px;
+    }
+
+    .upload-box .header p {
+      text-align: center;
+      color: black;
+    }
+
+    .upload-box .footer {
+      background-color: rgba(0, 110, 255, 0.075);
+      width: 100%;
+      height: 40px;
+      padding: 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: black;
+      border: none;
+    }
+
+    .upload-box .footer svg {
+      height: 130%;
+      fill: royalblue;
+      background-color: rgba(70, 66, 66, 0.103);
+      border-radius: 50%;
+      padding: 2px;
+      cursor: pointer;
+      box-shadow: 0 2px 30px rgba(0, 0, 0, 0.205);
+    }
+
+    .upload-box .footer p {
+      flex: 1;
+      text-align: center;
+    }
+
+    #file {
+      display: none;
+    }
+    /* From Uiverse.io by ilkhoeri */ 
+.button {
+  --h-button: 48px;
+  --w-button: 102px;
+  --round: 0.75rem;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  background: radial-gradient(
+      65.28% 65.28% at 50% 100%,
+      rgba(223, 113, 255, 0.8) 0%,
+      rgba(223, 113, 255, 0) 100%
+    ),
+    linear-gradient(0deg, #7a5af8, #7a5af8);
+  border-radius: var(--round);
+  border: none;
+  outline: none;
+  padding: 12px 18px;
+}
+.button::before,
+.button::after {
+  content: "";
+  position: absolute;
+  inset: var(--space);
+  transition: all 0.5s ease-in-out;
+  border-radius: calc(var(--round) - var(--space));
+  z-index: 0;
+}
+.button::before {
+  --space: 1px;
+  background: linear-gradient(
+    177.95deg,
+    rgba(255, 255, 255, 0.19) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+.button::after {
+  --space: 2px;
+  background: radial-gradient(
+      65.28% 65.28% at 50% 100%,
+      rgba(223, 113, 255, 0.8) 0%,
+      rgba(223, 113, 255, 0) 100%
+    ),
+    linear-gradient(0deg, #7a5af8, #7a5af8);
+}
+.button:active {
+  transform: scale(0.95);
+}
+
+.fold {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 1rem;
+  width: 1rem;
+  display: inline-block;
+  transition: all 0.5s ease-in-out;
+  background: radial-gradient(
+    100% 75% at 55%,
+    rgba(223, 113, 255, 0.8) 0%,
+    rgba(223, 113, 255, 0) 100%
+  );
+  box-shadow: 0 0 3px black;
+  border-bottom-left-radius: 0.5rem;
+  border-top-right-radius: var(--round);
+}
+.fold::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150%;
+  height: 150%;
+  transform: rotate(45deg) translateX(0%) translateY(-18px);
+  background-color: #e8e8e8;
+  pointer-events: none;
+}
+.button:hover .fold {
+  margin-top: -1rem;
+  margin-right: -1rem;
+}
+
+.points_wrapper {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.points_wrapper .point {
+  bottom: -10px;
+  position: absolute;
+  animation: floating-points infinite ease-in-out;
+  pointer-events: none;
+  width: 2px;
+  height: 2px;
+  background-color: #fff;
+  border-radius: 9999px;
+}
+@keyframes floating-points {
+  0% {
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-55px);
+    opacity: 0;
+  }
+}
+.points_wrapper .point:nth-child(1) {
+  left: 10%;
+  opacity: 1;
+  animation-duration: 2.35s;
+  animation-delay: 0.2s;
+}
+.points_wrapper .point:nth-child(2) {
+  left: 30%;
+  opacity: 0.7;
+  animation-duration: 2.5s;
+  animation-delay: 0.5s;
+}
+.points_wrapper .point:nth-child(3) {
+  left: 25%;
+  opacity: 0.8;
+  animation-duration: 2.2s;
+  animation-delay: 0.1s;
+}
+.points_wrapper .point:nth-child(4) {
+  left: 44%;
+  opacity: 0.6;
+  animation-duration: 2.05s;
+}
+.points_wrapper .point:nth-child(5) {
+  left: 50%;
+  opacity: 1;
+  animation-duration: 1.9s;
+}
+.points_wrapper .point:nth-child(6) {
+  left: 75%;
+  opacity: 0.5;
+  animation-duration: 1.5s;
+  animation-delay: 1.5s;
+}
+.points_wrapper .point:nth-child(7) {
+  left: 88%;
+  opacity: 0.9;
+  animation-duration: 2.2s;
+  animation-delay: 0.2s;
+}
+.points_wrapper .point:nth-child(8) {
+  left: 58%;
+  opacity: 0.8;
+  animation-duration: 2.25s;
+  animation-delay: 0.2s;
+}
+.points_wrapper .point:nth-child(9) {
+  left: 98%;
+  opacity: 0.6;
+  animation-duration: 2.6s;
+  animation-delay: 0.1s;
+}
+.points_wrapper .point:nth-child(10) {
+  left: 65%;
+  opacity: 1;
+  animation-duration: 2.5s;
+  animation-delay: 0.2s;
+}
+
+.inner {
+  z-index: 2;
+  gap: 6px;
+  position: relative;
+  width: 100%;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: color 0.2s ease-in-out;
+}
+
+.inner svg.icon {
+  width: 18px;
+  height: 18px;
+  transition: fill 0.1s linear;
+}
+
+.button:focus svg.icon {
+  fill: white;
+}
+.button:hover svg.icon {
+  fill: transparent;
+  animation:
+    dasharray 1s linear forwards,
+    filled 0.1s linear forwards 0.95s;
+}
+@keyframes dasharray {
+  from {
+    stroke-dasharray: 0 0 0 0;
+  }
+  to {
+    stroke-dasharray: 68 68 0 0;
+  }
+}
+@keyframes filled {
+  to {
+    fill: white;
+  }
+}
+.card {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0a0a;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .card__content {
+      background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(150, 150, 150, 0.329));
+      z-index: 1;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      width: 400px;
+      height: 400px;
+      filter: blur(80px);
+      animation: floatBlob 15s infinite ease-in-out alternate;
+      opacity: 0.8;
+    }
+
+    .blob:nth-child(2) {
+      left: -120px;
+      top: -150px;
+      background: #ff930f;
+    }
+
+    .blob:nth-child(3) {
+      right: -100px;
+      top: -50px;
+      background: #bf0fff;
+    }
+
+    .blob:nth-child(4) {
+      left: -80px;
+      bottom: -100px;
+      background: #ff1b6b;
+    }
+
+    .blob:nth-child(5) {
+      right: 0;
+      bottom: -150px;
+      background: #0061ff;
+    }
+
+    @keyframes floatBlob {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -60px) scale(1.2); }
+    }
+
+    /* ====== Foreground UI ====== */
+    .hero {
+      text-align: center;
+      padding: 50px 20px;
+      color: white;
+      position: relative;
+      z-index: 2;
+    }
+
+    .container {
+      width: 60%;
+      background: rgba(238, 219, 219, 0.466);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      margin: -20px auto 50px auto;
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      position: relative;
+      z-index: 2;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 15px;
+      font-size: 15px;
+      border-radius: 12px;
+      border: 1px solid #aaa;
+      resize: vertical;
+      transition: 0.3s;
+    }
+
+    textarea:focus {
+      border-color: #6c63ff;
+      box-shadow: 0 0 10px rgba(108,99,255,0.4);
+    }
+
+
+  </style>
+</head>
+
+<body>
+     <div class="card">
+    <div class="card__content"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
+  </div>
+
+  <div class="hero">
+    <h1>Textbook Summarizer And Question Predictor</h1>
+    <p>Upload a file like a PDF or DOCX — let AI do the work.</p>
+  </div>
+
+  <div class="container">
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form action="/process" method="POST" enctype="multipart/form-data">
+      <label><strong>Paste text:</strong></label>
+      <textarea name="user_text" rows="8" placeholder="Paste your text here..."></textarea>
+
+      <br><br>
+      <label><strong>Upload your Textbook File:</strong></label>
+
+      <!-- ✅ Uiverse.io Upload Box with Drag & Drop -->
+      <div class="upload-box" id="uploadBox">
+        <div class="header" id="uploadHeader">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p>Drag & Drop or Click to Upload</p>
+        </div>
+
+        <label for="file" class="footer">
+          <svg fill="#000000" viewBox="0 0 32 32"><path d="M15.331 6H8.5v20h15V14.154h-8.169z"/><path d="M18.153 6h-.009v5.342H23.5v-.002z"/></svg>
+          <p id="fileName">No file selected</p>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z" stroke="#000000" stroke-width="2"></path><path d="M19.5 5H4.5" stroke="#000000" stroke-width="2" stroke-linecap="round"></path><path d="M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z" stroke="#000000" stroke-width="2"></path></svg>
+        </label>
+
+        <input id="file" type="file" name="file_upload">
+      </div>
+<!-- From Uiverse.io by ilkhoeri --> 
+<button type="submit" class="button">
+  <span class="fold"></span>
+
+  <div class="points_wrapper">
+    <i class="point"></i>
+    <i class="point"></i>
+    <i class="point"></i>
+    <i class="point"></i>
+    <i class="point"></i>
+    <i class="point"></i>
+    <i class="point"></i>
+    <i class="point"></i>
+    <i class="point"></i>
+    <i class="point"></i>
+  </div>
+
+  <span class="inner"
+    ><svg
+      class="icon"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2.5"
+    >
+      <polyline
+        points="13.18 1.37 13.18 9.64 21.45 9.64 10.82 22.63 10.82 14.36 2.55 14.36 13.18 1.37"></polyline></svg>Generate Summary & Questions</span>
+</button>
+    </form>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById("file");
+    const fileNameDisplay = document.getElementById("fileName");
+    const uploadBox = document.getElementById("uploadBox");
+    const uploadHeader = document.getElementById("uploadHeader");
+
+    // Click header to open file picker
+    uploadHeader.addEventListener("click", () => fileInput.click());
+
+    // File selection
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = fileInput.files[0].name;
+      } else {
+        fileNameDisplay.textContent = "No file selected";
+      }
+    });
+
+    // Drag & Drop Events
+    uploadBox.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      uploadBox.classList.add("dragover");
+    });
+
+    uploadBox.addEventListener("dragleave", () => {
+      uploadBox.classList.remove("dragover");
+    });
+
+    uploadBox.addEventListener("drop", (e) => {
+      e.preventDefault();
+      uploadBox.classList.remove("dragover");
+
+      if (e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+        fileNameDisplay.textContent = e.dataTransfer.files[0].name;
+      }
+    });
+  </script>
+
+</body>
+</html>

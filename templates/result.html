@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Results</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #6c63ff, #4a90e2);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            color: #222;
+        }
+
+        /* Floating Background Shapes */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.23;
+            animation: float 6s infinite ease-in-out alternate;
+        }
+
+        .shape1 {
+            width: 170px; height: 170px;
+            background: #ffffff;
+            top: 60px; left: 50px;
+        }
+
+        .shape2 {
+            width: 260px; height: 260px;
+            background: #ffd700;
+            bottom: 80px; right: 80px;
+        }
+
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(40px); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            color: white;
+            animation: fadeIn 1s ease;
+        }
+
+        .hero img {
+            width: 320px;
+            animation: slowfloat 6s infinite;
+        }
+
+        @keyframes slowfloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Main Card */
+        .box-container {
+            width: 75%;
+            margin: -20px auto 60px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+            animation: fadeIn 1.3s ease-in-out;
+        }
+
+        h2 {
+            color: #6c63ff;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: #f7faff;
+            padding: 20px;
+            border-left: 6px solid #6c63ff;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            animation: fadeIn 1.5s ease;
+            line-height: 1.6;
+        }
+
+        ol {
+            padding-left: 25px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #6c63ff;
+            color: white;
+            padding: 14px 24px;
+            font-size: 18px;
+            border-radius: 10px;
+            transition: 0.3s;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #564ff0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 13px rgba(0,0,0,0.25);
+        }
+
+        /* Glow line divider */
+        .divider {
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(to right, #6c63ff, #ffd700);
+            margin: 30px 0;
+            animation: glow 3s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Floating Background Shapes -->
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+    
+        <h1>Your AI Results Are Ready</h1>
+        <p>Here’s the summary, questions, and original text.</p>
+    </div>
+
+    <!-- Result Card -->
+    <div class="box-container">
+
+        <h2>Summary</h2>
+        <div class="card">{{ summary }}</div>
+
+        <div class="divider"></div>
+
+        <h2>Generated Questions</h2>
+        <div class="card">
+            <ol>
+                {% for q in questions %}
+                    <li>{{ q }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <br><br>
+        <a href="/" class="back-btn">⬅ Go Back</a>
+    </div>
+
+</body>
+</html>
